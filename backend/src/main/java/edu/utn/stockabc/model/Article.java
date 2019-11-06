@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.List;
 
 @Data
@@ -35,6 +36,9 @@ public class Article {
 
     @Column(name = "ZONE")
     private Character zone;
+
+    @Transient
+    private double cav;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "article")
     @ToString.Exclude

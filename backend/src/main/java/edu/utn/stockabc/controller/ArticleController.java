@@ -3,15 +3,20 @@ package edu.utn.stockabc.controller;
 import edu.utn.stockabc.model.Article;
 import edu.utn.stockabc.model.ArticleDTO;
 import edu.utn.stockabc.model.Sale;
+import edu.utn.stockabc.model.ZonesDTO;
 import edu.utn.stockabc.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +27,9 @@ import java.util.stream.Collectors;
 public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
+    private double zoneA;
+    private double zoneB;
+    private double zoneC;
 
     @GetMapping("")
     public ResponseEntity<List<Article>> getAll(){
@@ -42,6 +50,21 @@ public class ArticleController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(articlesDto);
+    }
+
+    @GetMapping("/zones")
+    public ResponseEntity<ZonesDTO> getZones() {
+        ZonesDTO zonesDTO = new ZonesDTO(zoneA, zoneB, zoneC);
+        return ResponseEntity.ok(zonesDTO);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> patch(@PathVariable("id") Integer id, @RequestBody Character zone){
+        Article article = articleRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("Article not found for id: %s", id)));
+        article.setZone(zone);
+        articleRepository.save(article);
+
+        return ResponseEntity.ok().build();
     }
 
     private double getMean(List<Sale> sales) {
@@ -68,9 +91,6 @@ public class ArticleController {
     private void categorizeArticles(){
         List<Article> articles = articleRepository.findAll();
         double averageConsumption = 0;
-        double zoneA;
-        double zoneB;
-        double zoneC;
 
         // Get CAV of each article and average consumption
         for (Article article: articles) {

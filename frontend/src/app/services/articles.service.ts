@@ -1,3 +1,5 @@
+import { ArticlesConsumption } from './../models/articles-consumption';
+import { ArticlesZones } from './../models/articles-zones';
 import { ArticlesMean } from './../models/articles-mean';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,7 +10,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ArticlesService {
-  private apiURL = 'http://localhost:8080/article/mean';
+  private apiURL = 'http://localhost:8080/article/';
   httpOptions;
 
   constructor(private http: HttpClient) {
@@ -19,9 +21,9 @@ export class ArticlesService {
     };
   }
 
-  getAll(): Observable<any[]> {
+  getAll(): Observable<ArticlesMean[]> {
     return this.http
-      .get(this.apiURL)
+      .get(this.apiURL + 'mean')
       .pipe(
         map((data: any[]) =>
           data.map(
@@ -31,9 +33,32 @@ export class ArticlesService {
                 item.code,
                 item.name,
                 item.price,
-                item.mean
+                item.mean,
+                item.zone
               )
           )
+        )
+      );
+  }
+
+  getAllConsumption(): Observable<ArticlesConsumption[]> {
+    return this.http
+      .get(this.apiURL + 'consumption')
+      .pipe(
+        map((data: any[]) =>
+          data.map(
+            (item: any) => new ArticlesConsumption(item.code, item.consumption)
+          )
+        )
+      );
+  }
+
+  getZones(): Observable<ArticlesZones> {
+    return this.http
+      .get(this.apiURL + 'zones')
+      .pipe(
+        map(
+          (item: any) => new ArticlesZones(item.zoneA, item.zoneB, item.zoneC)
         )
       );
   }

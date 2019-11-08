@@ -4,6 +4,7 @@ export class ArticlesMean {
     public code?: number,
     public name?: string,
     public price?: number,
-    public mean?: number
+    public mean?: number,
+    public zone?: string
   ) {}
 }

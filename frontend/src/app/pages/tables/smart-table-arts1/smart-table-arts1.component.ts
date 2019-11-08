@@ -39,11 +39,23 @@ export class SmartTableArts1Component implements OnInit {
       },
       price: {
         title: 'Precio',
-        type: 'string'
+        valuePrepareFunction: value => {
+          // Set $ to column
+          return value === 'Total'
+            ? value
+            : Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(value);
+        }
       },
       mean: {
         title: 'Venta promedio',
         type: 'number'
+      },
+      zone: {
+        title: 'Zona',
+        type: 'string'
       }
     }
   };
@@ -60,6 +72,7 @@ export class SmartTableArts1Component implements OnInit {
 
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
+      console.log('entre');
       event.confirm.resolve();
     } else {
       event.confirm.reject();

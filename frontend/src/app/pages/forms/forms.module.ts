@@ -4,11 +4,13 @@ import {
   NbButtonModule,
   NbCardModule,
   NbCheckboxModule,
-  NbDatepickerModule, NbIconModule,
+  NbDatepickerModule,
+  NbIconModule,
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
   NbUserModule,
+  NbSpinnerModule
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -18,7 +20,10 @@ import { FormInputsComponent } from './form-inputs/form-inputs.component';
 import { FormLayoutsComponent } from './form-layouts/form-layouts.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { ButtonsComponent } from './buttons/buttons.component';
-import { FormsModule as ngFormsModule } from '@angular/forms';
+import {
+  FormsModule as ngFormsModule,
+  ReactiveFormsModule
+} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -35,13 +40,15 @@ import { FormsModule as ngFormsModule } from '@angular/forms';
     NbSelectModule,
     NbIconModule,
     ngFormsModule,
+    ReactiveFormsModule,
+    NbSpinnerModule
   ],
   declarations: [
     FormsComponent,
     ButtonsComponent,
     FormInputsComponent,
     FormLayoutsComponent,
-    DatepickerComponent,
-  ],
+    DatepickerComponent
+  ]
 })
-export class FormsModule { }
+export class FormsModule {}

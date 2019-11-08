@@ -50,7 +50,11 @@ export class SmartTableArts1Component implements OnInit {
         }
       },
       mean: {
-        title: 'Venta promedio',
+        title: 'Demanda promedio',
+        type: 'number'
+      },
+      stock: {
+        title: 'Stock',
         type: 'number'
       },
       zone: {

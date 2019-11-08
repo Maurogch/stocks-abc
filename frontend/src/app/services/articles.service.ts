@@ -34,6 +34,7 @@ export class ArticlesService {
                 item.name,
                 item.price,
                 item.mean,
+                item.stock,
                 item.zone
               )
           )

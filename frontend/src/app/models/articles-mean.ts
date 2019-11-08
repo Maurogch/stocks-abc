@@ -5,6 +5,7 @@ export class ArticlesMean {
     public name?: string,
     public price?: number,
     public mean?: number,
+    public stock?: number,
     public zone?: string
   ) {}
 }

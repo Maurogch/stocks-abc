@@ -1,6 +1,7 @@
 package edu.utn.stockabc.controller;
 
 import edu.utn.stockabc.model.Article;
+import edu.utn.stockabc.model.ArticleBarDTO;
 import edu.utn.stockabc.model.ArticleDTO;
 import edu.utn.stockabc.model.Sale;
 import edu.utn.stockabc.model.ZonesDTO;
@@ -57,6 +58,18 @@ public class ArticleController {
         return ResponseEntity.ok(zonesDTO);
     }
 
+    @GetMapping("/consumption")
+    public ResponseEntity<List<ArticleBarDTO>> getArticlesConsumption() {
+        List<Article> articles = articleRepository.findAll();
+        List<ArticleBarDTO> articlesBarDto = articles.stream()
+                .map(article -> convertToBarDto(article))
+                .collect(Collectors.toList());
+
+        articlesBarDto.sort(Comparator.comparing(ArticleBarDTO::getConsumption).reversed());
+
+        return ResponseEntity.ok(articlesBarDto);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> patch(@PathVariable("id") Integer id, @RequestBody Character zone){
         Article article = articleRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("Article not found for id: %s", id)));
@@ -83,8 +96,18 @@ public class ArticleController {
                 article.getCode(),
                 article.getName(),
                 article.getPrice(),
-                Math.floor(getMean(article.getSales())* 100) / 100 // truncate to two decimals
+                Math.floor(getMean(article.getSales())* 100) / 100, // truncate to two decimals
+                article.getZone()
                 );
+    }
+
+    private ArticleBarDTO convertToBarDto(Article article){
+        double consumption = getMean(article.getSales()) * article.getPrice();
+
+        return new ArticleBarDTO(
+                article.getCode(),
+                Math.floor(consumption * 100) / 100 // truncate to two decimals
+        );
     }
 
     private void categorizeArticles(){

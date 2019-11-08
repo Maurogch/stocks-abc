@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleDTO {
-    private int id;
+public class ArticleBarDTO {
     private int code;
-    private String name;
-    private double price;
-    private double mean;
-    private char zone;
+    private double consumption;
 }

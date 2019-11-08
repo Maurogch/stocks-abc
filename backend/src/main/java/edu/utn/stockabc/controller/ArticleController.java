@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Comparator;
@@ -84,7 +83,7 @@ public class ArticleController {
                 article.getCode(),
                 article.getName(),
                 article.getPrice(),
-                getMean(article.getSales())
+                Math.floor(getMean(article.getSales())* 100) / 100 // truncate to two decimals
                 );
     }
 

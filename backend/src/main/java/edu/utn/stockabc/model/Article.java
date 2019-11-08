@@ -34,6 +34,9 @@ public class Article {
     @Column(name = "PRICE")
     private Double price;
 
+    @Column(name = "STOCK")
+    private Integer stock;
+
     @Column(name = "ZONE")
     private Character zone;
 

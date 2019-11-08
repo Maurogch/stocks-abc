@@ -96,6 +96,7 @@ public class ArticleController {
                 article.getCode(),
                 article.getName(),
                 article.getPrice(),
+                article.getStock(),
                 Math.floor(getMean(article.getSales())* 100) / 100, // truncate to two decimals
                 article.getZone()
                 );

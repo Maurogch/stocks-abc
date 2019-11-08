@@ -12,6 +12,7 @@ public class ArticleDTO {
     private int code;
     private String name;
     private double price;
+    private int stock;
     private double mean;
     private char zone;
 }

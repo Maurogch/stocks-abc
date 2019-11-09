@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/article")
+@RequestMapping(value = "/article", produces = "application/json")
 public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;

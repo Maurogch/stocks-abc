@@ -43,6 +43,9 @@ public class Article {
     @Column(name = "ZONE")
     private Character zone;
 
+    @Column(name = "DIRTY", columnDefinition = "boolean default false")
+    private Boolean dirty;
+
     @Transient
     private double cav;
 

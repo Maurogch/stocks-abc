@@ -9,6 +9,14 @@ import { ArticlesService } from '../../../services/articles.service';
 })
 export class SmartTableArts1Component implements OnInit {
   settings = {
+    actions: {
+      custom: [
+        {
+          name: 'resetZone',
+          title: '<i class="nb-gear"></i>'
+        }
+      ]
+    },
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -81,6 +89,8 @@ export class SmartTableArts1Component implements OnInit {
 
     if (zone === 'A' || zone === 'B' || zone === 'C') {
       values['zone'] = zone;
+      values['dirty'] = true;
+      values['stock'] = event.newData.stock;
 
       this.service.patchZone(event.newData.id, values).subscribe(
         response => {
@@ -97,8 +107,25 @@ export class SmartTableArts1Component implements OnInit {
     }
   }
 
+  reset(event): void {
+    console.log('custom event');
+    console.log(event);
+    if (
+      window.confirm('Está seguro que desea resetear la zona del producto?')
+    ) {
+      const values = {};
+      values['dirty'] = false;
+
+      this.service.patchZone(event.data.id, values).subscribe(response => {
+        this.service.getAll().subscribe(data => {
+          this.source = data as ArticlesMean[];
+        });
+      });
+    }
+  }
+
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
+    if (window.confirm('Está seguro que desea borrar el artículo?')) {
       console.log('entre');
       event.confirm.resolve();
     } else {

@@ -5,3 +5,39 @@
     transform: translate3d(0, 0, 0);
   }
 }
+
+:host /deep/ ng2-st-tbody-edit-delete {
+  display: flex !important;
+  height: 100 !important;
+  width: 66% !important;
+  padding-top: 18px;
+}
+
+:host /deep/ ng2-st-tbody-create-cancel {
+  padding-top: 17px;
+}
+
+:host
+  /deep/
+  ng2-st-tbody-custom
+  a.ng2-smart-action.ng2-smart-action-custom-custom {
+  width: 100% !important;
+  text-align: center;
+  font-size: 1.1em;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  height: 100 !important;
+}
+
+:host
+  /deep/
+  ng2-st-tbody-custom
+  a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+  color: #5dcfe3;
+}
+
+:host /deep/ ng2-smart-table .ng2-smart-actions {
+  width: 100% !important;
+  display: inline-flex !important;
+  height: 100%;
+}

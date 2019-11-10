@@ -84,6 +84,10 @@ public class ArticleController {
     public ResponseEntity<?> patch(@PathVariable("id") Integer id, @RequestBody Article oldArticle){
         Article article = articleRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("Article not found for id: %s", id)));
         article.setZone(oldArticle.getZone());
+        if(oldArticle.getStock() != null){
+            article.setStock(oldArticle.getStock());
+        }
+        article.setDirty(oldArticle.getDirty());
         articleRepository.save(article);
 
         return ResponseEntity.ok().build();
@@ -137,33 +141,35 @@ public class ArticleController {
 
         // Set articles to zones
         for (Article article: articles) {
-            if(gateA || gateB) counter += getMean(article.getSales()); // Calculate mean only for zones A and B
+            if(!article.getDirty()){
+                if(gateA || gateB) counter += getMean(article.getSales()); // Calculate mean only for zones A and B
 
-            // Enter here only when there is space for articles in zone A
-            if(gateA){
-                if (counter < zoneA) article.setZone('A');
-                else {
-                    // Once zone A is complete
-                    article.setZone('A'); // Set last article to zone A
-                    gateA = false; // Change flags to stop loading articles to zone A, and start to zone B
-                    gateB = true;
-                    counter = 0; // Reset counter
+                // Enter here only when there is space for articles in zone A
+                if(gateA){
+                    if (counter < zoneA) article.setZone('A');
+                    else {
+                        // Once zone A is complete
+                        article.setZone('A'); // Set last article to zone A
+                        gateA = false; // Change flags to stop loading articles to zone A, and start to zone B
+                        gateB = true;
+                        counter = 0; // Reset counter
+                    }
                 }
-            }
-            // Do not enter if filling A or C
-            if(gateB){ // Do same for B
-                if (counter < zoneB) article.setZone('B');
-                else {
-                    article.setZone('B');
-                    gateB = false;
-                    gateC = true;
+                // Do not enter if filling A or C
+                if(gateB){ // Do same for B
+                    if (counter < zoneB) article.setZone('B');
+                    else {
+                        article.setZone('B');
+                        gateB = false;
+                        gateC = true;
+                    }
                 }
+                // Enter only when A and B are filled
+                if(gateC){ // C doesn't need checks as the rest of the items should go here
+                    article.setZone('C');
+                }
+                articleRepository.save(article);
             }
-            // Enter only when A and B are filled
-            if(gateC){ // C doesn't need checks as the rest of the items should go here
-                article.setZone('C');
-            }
-            articleRepository.save(article);
         }
     }
 

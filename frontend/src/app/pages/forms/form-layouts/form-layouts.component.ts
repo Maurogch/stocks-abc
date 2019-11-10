@@ -35,9 +35,15 @@ export class FormLayoutsComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     this.modelConfigForm = this.formBuilder.group({
-      reviewPeriod: ['', [Validators.required]],
-      deliveryTime: ['', [Validators.required]],
-      lastDelivery: [''],
+      reviewPeriod: ['', [Validators.required, Validators.min(0)]],
+      deliveryTime: ['', [Validators.required, Validators.min(0)]],
+      lastDelivery: ['', [Validators.required]],
+      satisfaction: [
+        '',
+        [Validators.required, Validators.min(0), Validators.max(100)]
+      ],
+      storageCost: ['', [Validators.required, Validators.min(0)]],
+      deliveryCost: ['', [Validators.required, Validators.min(0)]],
       id: ['1']
     });
   }
@@ -56,7 +62,10 @@ export class FormLayoutsComponent implements OnInit {
       reviewPeriod: modelConfig.reviewPeriod,
       deliveryTime: modelConfig.deliveryTime,
       lastDelivery: date, // expects a Date type
-      id: modelConfig.id
+      id: modelConfig.id,
+      satisfaction: modelConfig.satisfaction,
+      storageCost: modelConfig.storageCost,
+      deliveryCost: modelConfig.deliveryCost
     });
 
     // this.modelConfigForm.patchValue({ id: modelConfig.id });
@@ -65,10 +74,8 @@ export class FormLayoutsComponent implements OnInit {
   selectChange(id: number) {
     console.log(id);
     console.log('changed select');
-    this.modelConfigs.forEach(modelConfig => {
-      if (modelConfig.id === id) {
-        this.mapInputs(modelConfig);
-      }
+    this.modelConfigService.getById(id).subscribe(modelConfig => {
+      this.mapInputs(modelConfig);
     });
   }
 
@@ -124,6 +131,15 @@ export class FormLayoutsComponent implements OnInit {
   }
   get lastDelivery() {
     return this.modelConfigForm.get('lastDelivery');
+  }
+  get satisfaction() {
+    return this.modelConfigForm.get('satisfaction');
+  }
+  get storageCost() {
+    return this.modelConfigForm.get('storageCost');
+  }
+  get deliveryCost() {
+    return this.modelConfigForm.get('deliveryCost');
   }
   get id() {
     return this.modelConfigForm.get('id');

@@ -1,10 +1,29 @@
 <nb-card>
   <nb-card-header>
-    Smart Table
+    Artículos con cantidad fija de pedido
   </nb-card-header>
 
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+    <ng2-smart-table
+      [settings]="settingsQ"
+      [source]="sourceQ"
+      (deleteConfirm)="onDeleteConfirmQ($event)"
+    >
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-header>
+    Artículos con periodo de tiempo fijo
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table
+      [settings]="settingsP"
+      [source]="sourceP"
+      (deleteConfirm)="onDeleteConfirmP($event)"
+    >
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>

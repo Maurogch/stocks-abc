@@ -31,9 +31,32 @@ export class ModelConfigService {
                 item.reviewPeriod,
                 item.deliveryTime,
                 item.lastDelivery,
-                item.supplier
+                item.supplier,
+                item.satisfaction,
+                item.storageCost,
+                item.deliveryCost
               )
           )
+        )
+      );
+  }
+
+  getById(id: number): Observable<ModelConfig> {
+    return this.http
+      .get(this.apiURL + id)
+      .pipe(
+        map(
+          (item: any) =>
+            new ModelConfig(
+              item.id,
+              item.reviewPeriod,
+              item.deliveryTime,
+              item.lastDelivery,
+              item.supplier,
+              item.satisfaction,
+              item.storageCost,
+              item.deliveryCost
+            )
         )
       );
   }

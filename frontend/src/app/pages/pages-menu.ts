@@ -44,7 +44,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Forms',
+    title: 'Configuraciónes',
     icon: 'edit-2-outline',
     children: [
       {
@@ -52,7 +52,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/forms/inputs'
       },
       {
-        title: 'Form Layouts',
+        title: 'Proveedores',
         link: '/pages/forms/layouts'
       },
       {
@@ -145,84 +145,26 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Maps',
-    icon: 'map-outline',
-    children: [
-      {
-        title: 'Google Maps',
-        link: '/pages/maps/gmaps'
-      },
-      {
-        title: 'Leaflet Maps',
-        link: '/pages/maps/leaflet'
-      },
-      {
-        title: 'Bubble Maps',
-        link: '/pages/maps/bubble'
-      },
-      {
-        title: 'Search Maps',
-        link: '/pages/maps/searchmap'
-      }
-    ]
-  },
-  {
-    title: 'Charts',
+    title: 'Gráficos',
     icon: 'pie-chart-outline',
     children: [
       {
-        title: 'Echarts',
+        title: 'Clasificación ABC',
         link: '/pages/charts/echarts'
-      },
-      {
-        title: 'Charts.js',
-        link: '/pages/charts/chartjs'
-      },
-      {
-        title: 'D3',
-        link: '/pages/charts/d3'
       }
     ]
   },
   {
-    title: 'Editors',
-    icon: 'text-outline',
-    children: [
-      {
-        title: 'TinyMCE',
-        link: '/pages/editors/tinymce'
-      },
-      {
-        title: 'CKEditor',
-        link: '/pages/editors/ckeditor'
-      }
-    ]
-  },
-  {
-    title: 'Tables & Data',
+    title: 'Tablas & Datos',
     icon: 'grid-outline',
     children: [
       {
-        title: 'Artículos',
+        title: 'Artículos - Clasificación',
         link: '/pages/tables/smart-table-arts1'
       },
       {
-        title: 'Smart Table',
+        title: 'Artículos - Políticas de Stock',
         link: '/pages/tables/smart-table'
-      },
-      {
-        title: 'Tree Grid',
-        link: '/pages/tables/tree-grid'
-      }
-    ]
-  },
-  {
-    title: 'Miscellaneous',
-    icon: 'shuffle-2-outline',
-    children: [
-      {
-        title: '404',
-        link: '/pages/miscellaneous/404'
       }
     ]
   },

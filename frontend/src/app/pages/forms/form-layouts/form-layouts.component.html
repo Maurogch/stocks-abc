@@ -73,11 +73,73 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group"></div>
+              <div class="form-group">
+                <label for="inputSatisfaction" class="label"
+                  >Satisfacción %</label
+                >
+                <input
+                  formControlName="satisfaction"
+                  type="number"
+                  step="0.01"
+                  nbInput
+                  fullWidth
+                  id="inputSatisfaction"
+                  placeholder="95.5"
+                />
+                <nb-checkbox
+                  *ngIf="
+                    satisfaction.invalid &&
+                    (satisfaction.dirty || satisfaction.touched) &&
+                    satisfaction.errors.max
+                  "
+                  status="danger"
+                  >Valor no debe exceder 100</nb-checkbox
+                >
+                <nb-checkbox
+                  *ngIf="
+                    satisfaction.invalid &&
+                    (satisfaction.dirty || satisfaction.touched) &&
+                    satisfaction.errors.min
+                  "
+                  status="danger"
+                  >Valor no debe ser menor a 0</nb-checkbox
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputStorageCost" class="label"
+                  >Costo de almacenamiento anual $</label
+                >
+                <input
+                  formControlName="storageCost"
+                  type="number"
+                  nbInput
+                  fullWidth
+                  id="inputStorageCost"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="inputDeliveryCost" class="label"
+                  >Costo de pedido $</label
+                >
+                <input
+                  formControlName="deliveryCost"
+                  type="number"
+                  nbInput
+                  fullWidth
+                  id="inputDeliveryCost"
+                />
+              </div>
             </div>
           </div>
           <button
             nbButton
+            [disabled]="!modelConfigForm.valid"
             type="submit"
             status="primary"
             size="medium"

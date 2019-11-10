@@ -1,3 +1,4 @@
+import { ArticlePq } from './../models/article-pq';
 import { ArticlesConsumption } from './../models/articles-consumption';
 import { ArticlesZones } from './../models/articles-zones';
 import { ArticlesMean } from './../models/articles-mean';
@@ -33,9 +34,60 @@ export class ArticlesService {
                 item.code,
                 item.name,
                 item.price,
-                item.mean,
                 item.stock,
+                item.supplier,
+                item.mean,
                 item.zone
+              )
+          )
+        )
+      );
+  }
+
+  getAllModelP(): Observable<ArticlePq[]> {
+    return this.http
+      .get(this.apiURL + 'modelp')
+      .pipe(
+        map((data: any[]) =>
+          data.map(
+            (item: any) =>
+              new ArticlePq(
+                item.code,
+                item.name,
+                item.price,
+                item.stock,
+                item.securityReserve,
+                item.supplier,
+                item.optimalLot,
+                item.nextRevition,
+                item.zone,
+                item.annualManteinanceCost,
+                item.reorderPoint
+              )
+          )
+        )
+      );
+  }
+
+  getAllModelQ(): Observable<ArticlePq[]> {
+    return this.http
+      .get(this.apiURL + 'modelq')
+      .pipe(
+        map((data: any[]) =>
+          data.map(
+            (item: any) =>
+              new ArticlePq(
+                item.code,
+                item.name,
+                item.price,
+                item.stock,
+                item.securityReserve,
+                item.supplier,
+                item.optimalLot,
+                item.nextRevition,
+                item.zone,
+                item.annualManteinanceCost,
+                item.reorderPoint
               )
           )
         )

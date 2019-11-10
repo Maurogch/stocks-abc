@@ -1,6 +1,5 @@
 import { ArticlesMean } from './../../../models/articles-mean';
 import { Component, OnInit } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
 import { ArticlesService } from '../../../services/articles.service';
 
 @Component({
@@ -48,6 +47,10 @@ export class SmartTableArts1Component implements OnInit {
                 currency: 'USD'
               }).format(value);
         }
+      },
+      supplier: {
+        title: 'Demanda promedio',
+        type: 'number'
       },
       mean: {
         title: 'Demanda promedio',

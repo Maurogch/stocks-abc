@@ -81,9 +81,9 @@ public class ArticleController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> patch(@PathVariable("id") Integer id, @RequestBody Character zone){
+    public ResponseEntity<?> patch(@PathVariable("id") Integer id, @RequestBody Article oldArticle){
         Article article = articleRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("Article not found for id: %s", id)));
-        article.setZone(zone);
+        article.setZone(oldArticle.getZone());
         articleRepository.save(article);
 
         return ResponseEntity.ok().build();

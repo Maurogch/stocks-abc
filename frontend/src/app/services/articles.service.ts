@@ -106,6 +106,10 @@ export class ArticlesService {
       );
   }
 
+  patchZone(id: number, values): Observable<any> {
+    return this.http.patch(this.apiURL + id, values, this.httpOptions);
+  }
+
   getZones(): Observable<ArticlesZones> {
     return this.http
       .get(this.apiURL + 'zones')

@@ -17,17 +17,14 @@ export class SmartTableArts1Component implements OnInit {
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>'
+      cancelButtonContent: '<i class="nb-close"></i>',
+      confirmSave: true
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number'
-      },
       code: {
         title: 'Código',
         type: 'number'
@@ -75,6 +72,29 @@ export class SmartTableArts1Component implements OnInit {
     this.service.getAll().subscribe(data => {
       this.source = data as ArticlesMean[];
     });
+  }
+
+  onEditConfirm(event): void {
+    console.log(event);
+    const values = {};
+    const zone = event.newData.zone;
+
+    if (zone === 'A' || zone === 'B' || zone === 'C') {
+      values['zone'] = zone;
+
+      this.service.patchZone(event.newData.id, values).subscribe(
+        response => {
+          event.confirm.resolve();
+        },
+        err => {
+          console.log(err);
+          window.confirm('Error al modificar');
+          event.confirm.reject();
+        }
+      );
+    } else {
+      window.confirm('Caracter inválido, debe ser A, B o C');
+    }
   }
 
   onDeleteConfirm(event): void {

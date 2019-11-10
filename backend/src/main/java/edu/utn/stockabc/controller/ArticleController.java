@@ -3,9 +3,14 @@ package edu.utn.stockabc.controller;
 import edu.utn.stockabc.model.Article;
 import edu.utn.stockabc.model.ArticleBarDTO;
 import edu.utn.stockabc.model.ArticleDTO;
+import edu.utn.stockabc.model.ArticlePQDTO;
+import edu.utn.stockabc.model.ModelConfig;
 import edu.utn.stockabc.model.Sale;
 import edu.utn.stockabc.model.ZonesDTO;
 import edu.utn.stockabc.repository.ArticleRepository;
+import edu.utn.stockabc.repository.ModelConfigRepository;
+import edu.utn.stockabc.util.NormalDistribution;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +34,9 @@ import java.util.stream.Collectors;
 public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private ModelConfigRepository modelConfigRepository;
+
     private double zoneA;
     private double zoneB;
     private double zoneC;
@@ -79,17 +89,6 @@ public class ArticleController {
         return ResponseEntity.ok().build();
     }
 
-    private double getMean(List<Sale> sales) {
-        Mean mean = new Mean();
-        double[] array = new double[sales.size()];
-
-        for (int i = 0; i < sales.size() ; i++) {
-            array[i] = sales.get(i).getNumber();
-        }
-
-        return mean.evaluate(array);
-    }
-
     private ArticleDTO convertToDto(Article article){
         return new ArticleDTO(
                 article.getId(),
@@ -97,6 +96,7 @@ public class ArticleController {
                 article.getName(),
                 article.getPrice(),
                 article.getStock(),
+                article.getSuplier(),
                 Math.floor(getMean(article.getSales())* 100) / 100, // truncate to two decimals
                 article.getZone()
                 );
@@ -128,7 +128,7 @@ public class ArticleController {
         // Units of reference for each zone
         zoneA = averageConsumption * 20 / 100;
         zoneB = averageConsumption * 10 / 100;
-        zoneC = averageConsumption * 70 / 100; // Unused value
+        zoneC = averageConsumption * 70 / 100;
 
         boolean gateA = true;
         boolean gateB = false;
@@ -163,7 +163,162 @@ public class ArticleController {
             if(gateC){ // C doesn't need checks as the rest of the items should go here
                 article.setZone('C');
             }
+            articleRepository.save(article);
         }
     }
 
+    private double getMean(List<Sale> sales) {
+        Mean mean = new Mean();
+        double[] array = new double[sales.size()];
+
+        // Convert list of sales to array of doubles
+        for (int i = 0; i < sales.size() ; i++) {
+            array[i] = sales.get(i).getNumber();
+        }
+
+        return mean.evaluate(array);
+    }
+
+    private double getStandardDeviation(List<Sale> sales) {
+        StandardDeviation standardDeviation = new StandardDeviation();
+
+        double[] array = new double[sales.size()];
+
+        // Convert list of sales to array of doubles
+        for (int i = 0; i < sales.size() ; i++) {
+            array[i] = sales.get(i).getNumber();
+        }
+
+        return standardDeviation.evaluate(array);
+    }
+
+    @GetMapping("/modelp")
+    public ResponseEntity<List<ArticlePQDTO>> calculateModelP(){
+        List<Article> articles = articleRepository.getAllZonesBC();
+        List<ArticlePQDTO> articlePQDTOList = new ArrayList<>();
+        NormalDistribution normalDistribution = new NormalDistribution();
+        ModelConfig modelConfig;
+        double dailyDemand;
+        double standardDeviation;
+        double deviationTL;
+        double expectedValue; // Esperanza
+        double z;
+        double optimalLot;
+        double securityReserve;
+        double totalAnnualCost;
+        double annualManteinanceCost;
+
+        for (Article article: articles) {
+            modelConfig = modelConfigRepository.getBySupplierName(article.getSuplier());
+            standardDeviation = getStandardDeviation(article.getSales());
+            dailyDemand = getMean(article.getSales());
+
+            deviationTL = Math.sqrt((modelConfig.getReviewPeriod() + modelConfig.getDeliveryTime())) * standardDeviation;
+
+            expectedValue = dailyDemand * modelConfig.getReviewPeriod() * (1 - (modelConfig.getSatisfaction()/100));
+            expectedValue = expectedValue / deviationTL;
+
+            z = normalDistribution.getNormalDistribution(expectedValue);
+
+            optimalLot = dailyDemand * (modelConfig.getReviewPeriod() + modelConfig.getDeliveryTime());
+            securityReserve = z * deviationTL;
+            optimalLot = optimalLot + securityReserve;
+            optimalLot = optimalLot - article.getStock();
+            optimalLot = Math.ceil(optimalLot); // Round up
+
+            annualManteinanceCost = (optimalLot / 2) * modelConfig.getStorageCost();
+            annualManteinanceCost = annualManteinanceCost + securityReserve * modelConfig.getStorageCost();
+            annualManteinanceCost = Math.floor(annualManteinanceCost * 100) / 100;
+
+            /*totalAnnualCost = (dailyDemand * 230 * article.getPrice());
+            totalAnnualCost = totalAnnualCost + ((optimalLot / 2) * modelConfig.getStorageCost());
+            totalAnnualCost = Math.floor(totalAnnualCost * 100) / 100;*/
+
+            ArticlePQDTO articlePQDTO = new ArticlePQDTO(
+                    article.getCode(),
+                    article.getName(),
+                    article.getPrice(),
+                    article.getStock(),
+                    (int)Math.ceil(securityReserve),
+                    article.getSuplier(),
+                    (int)optimalLot,
+                    LocalDate.now().plusDays(modelConfig.getReviewPeriod()), // Set next delivery for product
+                    article.getZone(),
+                    annualManteinanceCost,
+                    0 // Not necesary for Model P
+            );
+
+            articlePQDTOList.add(articlePQDTO);
+        }
+
+        return ResponseEntity.ok(articlePQDTOList);
+    }
+
+    @GetMapping("/modelq")
+    public ResponseEntity<List<ArticlePQDTO>> calculateModelQ(){
+        List<Article> articles = articleRepository.getAllZonesA();
+        List<ArticlePQDTO> articlePQDTOList = new ArrayList<>();
+        NormalDistribution normalDistribution = new NormalDistribution();
+        ModelConfig modelConfig;
+        double dailyDemand;
+        double annualDemand;
+        double standardDeviation;
+        double deviationL;
+        double expectedValue; // Esperanza
+        double z;
+        double optimalLot;
+        double securityReserve;
+        double totalAnnualCost;
+        double annualManteinanceCost;
+        double reorderPoint;
+
+        for (Article article: articles) {
+            modelConfig = modelConfigRepository.getBySupplierName(article.getSuplier());
+            standardDeviation = getStandardDeviation(article.getSales());
+            dailyDemand = getMean(article.getSales());
+            annualDemand = dailyDemand * 365;
+
+            optimalLot = Math.sqrt((2 * annualDemand * modelConfig.getDeliveryCost()) / modelConfig.getStorageCost());
+
+            deviationL = Math.sqrt(modelConfig.getDeliveryTime()) * standardDeviation;
+            expectedValue = (1 - (modelConfig.getSatisfaction() / 100)) * (optimalLot / deviationL);
+            z = normalDistribution.getNormalDistribution(expectedValue);
+
+            securityReserve = z * deviationL;
+            reorderPoint = dailyDemand * modelConfig.getDeliveryTime();
+            reorderPoint = reorderPoint + securityReserve;
+
+            optimalLot = Math.ceil(optimalLot);
+            reorderPoint = Math.ceil(reorderPoint);
+            securityReserve = Math.ceil(securityReserve);
+
+            annualManteinanceCost = (optimalLot / 2) * modelConfig.getStorageCost();
+            annualManteinanceCost = annualManteinanceCost + securityReserve * modelConfig.getStorageCost();
+            annualManteinanceCost = Math.floor(annualManteinanceCost * 100) / 100;
+
+            /*totalAnnualCost = annualDemand * article.getPrice();
+            totalAnnualCost = totalAnnualCost + ((annualDemand * modelConfig.getDeliveryCost()) / optimalLot);
+            totalAnnualCost = totalAnnualCost + (optimalLot * modelConfig.getStorageCost() / 2);
+            totalAnnualCost = totalAnnualCost + (securityReserve * modelConfig.getStorageCost());
+            totalAnnualCost = Math.floor(totalAnnualCost * 100) / 100;*/
+
+            ArticlePQDTO articlePQDTO = new ArticlePQDTO(
+                    article.getCode(),
+                    article.getName(),
+                    article.getPrice(),
+                    article.getStock(),
+                    (int)securityReserve,
+                    article.getSuplier(),
+                    (int)optimalLot,
+                    LocalDate.now(),
+                    article.getZone(),
+                    annualManteinanceCost,
+                    (int)reorderPoint
+            );
+
+            articlePQDTOList.add(articlePQDTO);
+        }
+
+        return ResponseEntity.ok(articlePQDTOList);
+    }
 }

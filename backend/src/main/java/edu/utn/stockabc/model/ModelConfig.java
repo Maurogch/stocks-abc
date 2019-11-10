@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -26,8 +26,17 @@ public class ModelConfig {
     private int deliveryTime;
 
     @Column(name = "LAST_DELIVERY")
-    private Date lastDelivery;
+    private LocalDate lastDelivery;
 
     @Column(name = "SUPPLIER")
     private String supplier;
+
+    @Column(name = "SATISFACTION")
+    private double satisfaction;
+
+    @Column(name = "STORAGE_COST")
+    private double storageCost;
+
+    @Column(name = "DELIVERY_COST")
+    private double deliveryCost;
 }

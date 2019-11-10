@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,10 +27,18 @@ public class ModelConfigController {
     public ResponseEntity<List<ModelConfig>> getAll(){
         try{
             List<ModelConfig> modelConfigs = modelConfigRepository.findAll();
+
             return ResponseEntity.ok(modelConfigs);
         } catch (Exception ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ModelConfig> getAll(@PathVariable("id") Integer id){
+        ModelConfig modelConfig = modelConfigRepository.findById(id).orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("ModelConfig not found for id: %s", id)));
+
+        return ResponseEntity.ok(modelConfig);
     }
 
     @PatchMapping("/{id}")

@@ -1,33 +1,33 @@
-INSERT INTO MODELCONFIGS(ID, REVIEW_PERIOD, DELIVERY_TIME, LAST_DELIVERY, SUPPLIER)
-VALUES (1, 3, 1, '2019-11-11', 'Proveedor A'), (2, 4, 1, '2019-11-10', 'Proveedor B');
+INSERT INTO MODELCONFIGS(ID, REVIEW_PERIOD, DELIVERY_TIME, LAST_DELIVERY, SUPPLIER, SATISFACTION, DELIVERY_COST, STORAGE_COST)
+VALUES (1, 7, 2, '2019-11-11', 'Proveedor A', 95, 4.5, 36.5), (2, 9, 2, '2019-11-10', 'Proveedor B', 99, 5.0, 20.7);
 
-INSERT INTO ARTICLES(ID, CODE, NAME, PRICE, STOCK)
+INSERT INTO ARTICLES(ID, CODE, NAME, PRICE, SUPPLIER, STOCK)
 VALUES
-    (1,1,'Papas Clasicas x50Grs', 23, 1181),
-    (2,3,'Papas Clasicas x180Grs', 69, 1219),
-    (3,4,'Nachos Salados x100Grs', 15.6, 1437),
-    (4,5,'Nachos Sabor Queso x100Grs', 46, 1689),
-    (5,6,'Nachos Sabor Queso x50Grs', 23, 1476),
-    (6,7,'Batatas Quento x80Grs', 45.9, 1713),
-    (7,9,'Papas Quento Sin Sal x100Grs', 46, 1311),
-    (8,11,'Conos Sabor Queso x90Grs', 46, 1288),
-    (9,14,'Arroz bañado x40 grs', 23, 1940),
-    (10,15,'Papas Saborizadas x100Grs', 46, 1372),
-    (11,16,'Papas Saborizadas x50Grs', 23, 1539),
-    (12,17,'Palitos Quento x100Grs Varios', 46, 1639),
-    (13,25,'Maicitos Pehuamar x330grs', 85.8, 1146),
-    (14,27,'Palitos Pehuamar x770grs Salados', 170, 1463),
-    (15,29,'Mani Cris Jor x1kg', 150, 1179),
-    (16,30,'Bastones krachitos x300grs', 90, 1932),
-    (17,31,'Papas Cheedar Krachitos x350Grs', 130, 1694),
-    (18,33,'Doritos x 250 grs', 120, 1303),
-    (19,35,'Papas Pay Quento x475grs', 170, 1461),
-    (20,50,'Crunchips X185 Grs', 35, 1154),
-    (21,51,'Budittini X225 Grs Gaona', 40, 2000),
-    (22,54,'Magdalenas X250 Grs Gaona', 45, 1921),
-    (23,55,'Pepas x315 Membrillo - Batata', 32, 1583),
-    (24,70,'Maíz Frito Salado x 1kg importado', 258.75, 1874),
-    (25,80,'Budines Gaona x 180 grs', 39, 1445);
+    (1,1,'Papas Clasicas x50Grs', 23, 'Proveedor A',634),
+    (2,3,'Papas Clasicas x180Grs', 69, 'Proveedor A', 338),
+    (3,4,'Nachos Salados x100Grs', 15.6, 'Proveedor A', 475),
+    (4,5,'Nachos Sabor Queso x100Grs', 46, 'Proveedor A', 300),
+    (5,6,'Nachos Sabor Queso x50Grs', 23, 'Proveedor A', 350),
+    (6,7,'Batatas Quento x80Grs', 45.9, 'Proveedor A', 779),
+    (7,9,'Papas Quento Sin Sal x100Grs', 46, 'Proveedor A', 235),
+    (8,11,'Conos Sabor Queso x90Grs', 46, 'Proveedor B', 773),
+    (9,14,'Arroz bañado x40 grs', 23, 'Proveedor A', 479),
+    (10,15,'Papas Saborizadas x100Grs', 46, 'Proveedor A', 301),
+    (11,16,'Papas Saborizadas x50Grs', 23, 'Proveedor B', 620),
+    (12,17,'Palitos Quento x100Grs Varios', 46, 'Proveedor B', 330),
+    (13,25,'Maicitos Pehuamar x330grs', 85.8, 'Proveedor B', 473),
+    (14,27,'Palitos Pehuamar x770grs Salados', 170, 'Proveedor B', 724),
+    (15,29,'Mani Cris Jor x1kg', 150, 'Proveedor B', 2300),
+    (16,30,'Bastones krachitos x300grs', 90, 'Proveedor B', 377),
+    (17,31,'Papas Cheedar Krachitos x350Grs', 130, 'Proveedor A', 1500),
+    (18,33,'Doritos x 250 grs', 120, 'Proveedor B', 767),
+    (19,35,'Papas Pay Quento x475grs', 170, 'Proveedor A', 272),
+    (20,50,'Crunchips X185 Grs', 35, 'Proveedor B', 474),
+    (21,51,'Budittini X225 Grs Gaona', 40, 'Proveedor B', 713),
+    (22,54,'Magdalenas X250 Grs Gaona', 45, 'Proveedor A', 681),
+    (23,55,'Pepas x315 Membrillo - Batata', 32, 'Proveedor B', 818),
+    (24,70,'Maíz Frito Salado x 1kg importado', 258.75, 'Proveedor A', 323),
+    (25,80,'Budines Gaona x 180 grs', 39, 'Proveedor B', 395);
     
 
 INSERT INTO SALES(DATE, NUMBER, ID_ARTICLE)

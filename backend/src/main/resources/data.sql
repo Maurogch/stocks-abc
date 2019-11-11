@@ -1,5 +1,6 @@
 INSERT INTO MODELCONFIGS(ID, REVIEW_PERIOD, DELIVERY_TIME, LAST_DELIVERY, SUPPLIER, SATISFACTION, DELIVERY_COST, STORAGE_COST)
-VALUES (1, 7, 2, '2019-11-11', 'Proveedor A', 95, 4.5, 36.5), (2, 9, 2, '2019-11-10', 'Proveedor B', 99, 5.0, 20.7);
+VALUES (1, 7, 2, '2019-11-11', 'Proveedor A', 95, 4.5, 36.5), (2, 9, 2, '2019-11-10', 'Proveedor B', 99, 5.0, 20.7),
+(3, 7, 2, '2019-11-08', 'Proveedor C', 90, 4.7, 18.3);
 
 INSERT INTO ARTICLES(ID, CODE, NAME, PRICE, SUPPLIER, STOCK)
 VALUES
@@ -25,9 +26,9 @@ VALUES
     (20,50,'Crunchips X185 Grs', 35, 'Proveedor B', 474),
     (21,51,'Budittini X225 Grs Gaona', 40, 'Proveedor B', 713),
     (22,54,'Magdalenas X250 Grs Gaona', 45, 'Proveedor A', 681),
-    (23,55,'Pepas x315 Membrillo - Batata', 32, 'Proveedor B', 818),
+    (23,55,'Pepas x315 Membrillo - Batata', 32, 'Proveedor C', 818),
     (24,70,'Maíz Frito Salado x 1kg importado', 258.75, 'Proveedor A', 323),
-    (25,80,'Budines Gaona x 180 grs', 39, 'Proveedor B', 395);
+    (25,80,'Budines Gaona x 180 grs', 39, 'Proveedor C', 395);
     
 
 INSERT INTO SALES(DATE, NUMBER, ID_ARTICLE)

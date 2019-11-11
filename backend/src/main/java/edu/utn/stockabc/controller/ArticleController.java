@@ -245,7 +245,7 @@ public class ArticleController {
                     article.getName(),
                     article.getPrice(),
                     article.getStock(),
-                    (int)Math.ceil(securityReserve),
+                    Math.abs((int)Math.ceil(securityReserve)),
                     article.getSuplier(),
                     (int)optimalLot,
                     LocalDate.now().plusDays(modelConfig.getReviewPeriod()), // Set next delivery for product

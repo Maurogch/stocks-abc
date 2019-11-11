@@ -2,7 +2,7 @@
 
 This is a project for the subject "Operations research II" from the career "Advanced Technician in Information Systems".
 
-The objective of this program is to classify stock by the ABC system. Then apply Pareto stock policies depending on classification.
+The objective of this program is to classify stock by the ABC system. Then apply Pareto's stock policies depending on classification.
 
 ## Technologies
 

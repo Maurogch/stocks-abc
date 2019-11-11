@@ -1,42 +1,92 @@
-<div class="row">
-  <div class="col-lg-6">
-    <nb-card>
-      <nb-card-header>Pie</nb-card-header>
-      <nb-card-body>
-        <ngx-d3-pie></ngx-d3-pie>
-      </nb-card-body>
-    </nb-card>
+<div class="row text-center">
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+      >
+        Anterior
+      </div>
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+        Hoy
+      </div>
+      <div
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+      >
+        Siguente
+      </div>
+    </div>
   </div>
-  <div class="col-lg-6">
-    <nb-card>
-      <nb-card-header>Bar</nb-card-header>
-      <nb-card-body>
-        <ngx-d3-bar></ngx-d3-bar>
-      </nb-card-body>
-    </nb-card>
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate: view + 'ViewTitle':'en' }}</h3>
   </div>
-  <div class="col-lg-6">
-    <nb-card>
-      <nb-card-header>Line</nb-card-header>
-      <nb-card-body>
-        <ngx-d3-line></ngx-d3-line>
-      </nb-card-body>
-    </nb-card>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        (click)="setView('month')"
+        [class.active]="view === 'month'"
+      >
+        Mes
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="setView('week')"
+        [class.active]="view === 'week'"
+      >
+        Semana
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="setView('day')"
+        [class.active]="view === 'day'"
+      >
+        Día
+      </div>
+    </div>
   </div>
-  <div class="col-lg-6">
-    <nb-card>
-      <nb-card-header>Advanced Pie</nb-card-header>
-      <nb-card-body>
-        <ngx-d3-advanced-pie></ngx-d3-advanced-pie>
-      </nb-card-body>
-    </nb-card>
+</div>
+<br />
+<ng-template #loading>
+  <div class="text-center">
+    <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
+    Cargando eventos...
   </div>
-  <div class="col-lg-6">
-    <nb-card>
-      <nb-card-header>Area Chart</nb-card-header>
-      <nb-card-body>
-        <ngx-d3-area-stack></ngx-d3-area-stack>
-      </nb-card-body>
-    </nb-card>
+</ng-template>
+
+<div *ngIf="events$ | async; else loading; let events">
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="'month'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="eventClicked($event.event)"
+    >
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="'week'"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="eventClicked($event.event)"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="'day'"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="eventClicked($event.event)"
+    >
+    </mwl-calendar-day-view>
   </div>
 </div>

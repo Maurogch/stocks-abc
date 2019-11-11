@@ -145,12 +145,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Gráficos',
+    title: 'Gráficos y Calendario',
     icon: 'pie-chart-outline',
     children: [
       {
         title: 'Clasificación ABC',
         link: '/pages/charts/echarts'
+      },
+      {
+        title: 'Calendario de entregas',
+        link: '/pages/charts/d3'
       }
     ]
   },

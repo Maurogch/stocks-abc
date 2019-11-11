@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
 
+// Angular Calendar
+@import '~angular-calendar/css/angular-calendar.css';
+
 // themes - our custom or/and out of the box themes
 @import 'themes';
 
@@ -20,7 +23,6 @@
 
 // install the framework and custom global styles
 @include nb-install() {
-
   // framework global styles
   @include nb-theme-global();
   @include nb-auth-global();
@@ -30,4 +32,4 @@
   @include ngx-pace-theme();
 
   @include nb-overrides();
-};
+}
